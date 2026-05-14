@@ -15,13 +15,6 @@ interface WatchlistItemProps {
   isDragging?: boolean;
 }
 
-function fmtPrice(price: number) {
-  return price.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: price < 1 ? 4 : 2,
-  });
-}
-
 function fmtPct(pct: number) {
   const sign = pct >= 0 ? "+" : "";
   return `${sign}${pct.toFixed(2)}%`;
@@ -119,16 +112,8 @@ export default function WatchlistItem({
           />
         </div>
 
-        {/* Price + % badge + extended label */}
-        <div className="flex flex-col items-end flex-shrink-0 min-w-[90px]">
-          {/* Current price */}
-          <span
-            className="text-white font-semibold leading-tight"
-            style={{ fontSize: 16 }}
-          >
-            {fmtPrice(quote.regularMarketPrice)}
-          </span>
-
+        {/* % badge + extended label */}
+        <div className="flex flex-col items-end flex-shrink-0 min-w-[72px]">
           {/* % badge */}
           <div
             className="mt-[3px] rounded-[4px] text-white font-semibold text-right leading-tight"

@@ -84,7 +84,7 @@ stockdash/
 │   ├── layout/
 │   │   └── BottomNav.tsx        ← 5-tab nav: Watchlists, Markets, News, Explore, Menu
 │   ├── watchlist/
-│   │   ├── WatchlistItem.tsx    ← Row: logo + ticker + sparkline + price + %change
+│   │   ├── WatchlistItem.tsx    ← Row: logo + ticker + sparkline + %change (no price)
 │   │   └── AddTickerModal.tsx   ← Search modal to add tickers
 │   ├── stock/
 │   │   ├── StockHeader.tsx      ← Price, change, AH/PM price display
@@ -272,6 +272,7 @@ git commit -m "feat: <description>"
 | Date | What Changed |
 |---|---|
 | 2026-05-14 | Initial CLAUDE.md created. All features above confirmed implemented. |
+| 2026-05-14 | WatchlistItem: removed price display — row now shows logo + ticker + sparkline + %change only |
 
 ---
 
