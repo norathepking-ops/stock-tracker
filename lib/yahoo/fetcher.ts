@@ -235,8 +235,19 @@ export const MARKET_MOVERS_SYMBOLS = [
   "CAT","DE","BA","HON","GE","F","GM","UBER","UPS","FDX",
   // ETFs/Indices proxies
   "SPY","QQQ","IWM","GLD","TLT",
-  // Other large caps
-  "DIS","NFLX","T","VZ","TMUS","PYPL","SQ","COIN","RBLX","SNAP",
+  // Other large caps (NFLX removed — duplicate above)
+  "DIS","T","VZ","TMUS","PYPL","SQ","COIN","RBLX","SNAP","NET",
 ];
 
-export const INDEX_SYMBOLS = ["^DJI", "^IXIC", "^GSPC"];
+export const INDEX_SYMBOLS = [
+  // US
+  "^DJI", "^IXIC", "^GSPC",
+  // Asia Pacific
+  "^N225", "^KS11", "^HSI", "000001.SS", "^NSEI", "^AXJO", "^TWII",
+  // Europe
+  "^FTSE", "^GDAXI", "^FCHI", "^FTSEMIB",
+  // Americas
+  "^GSPTSE", "^BVSP",
+  // Commodities & Crypto
+  "GC=F", "CL=F", "BTC-USD",
+];

@@ -24,7 +24,7 @@ export default function ChartTab({ symbol }: ChartTabProps) {
   const candleSeriesRef = useRef<CandleSeries | null>(null);
   const volumeSeriesRef = useRef<HistSeries | null>(null);
   const chartInitialized = useRef(false);
-  const [range, setRange] = useState("3mo");
+  const [range, setRange] = useState("1d");
   const [loading, setLoading] = useState(true);
 
   // Load chart data and push to existing series

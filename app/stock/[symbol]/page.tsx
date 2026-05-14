@@ -8,6 +8,7 @@ import NewsTab from "@/components/stock/NewsTab";
 import AnalysisTab from "@/components/stock/AnalysisTab";
 import TechnicalTab from "@/components/stock/TechnicalTab";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import TickerLogo from "@/components/ui/TickerLogo";
 import type { QuoteData } from "@/lib/yahoo/fetcher";
 
 const TABS = ["Chart", "News", "Analysis", "Technical"] as const;
@@ -49,7 +50,7 @@ export default function StockDetailPage({ params }: PageProps) {
     }
     fetchQ();
     if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(fetchQ, 20000);
+    intervalRef.current = setInterval(fetchQ, 10000);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [decodedSymbol]);
 
@@ -69,26 +70,27 @@ export default function StockDetailPage({ params }: PageProps) {
   return (
     <div
       className="flex flex-col min-h-full"
-      style={{ background: "#10141f" }}
+      style={{ background: "#0a0e17" }}
     >
       {/* Top bar */}
       <div
         className="flex items-center justify-between px-4 pt-14 pb-3 sticky top-0 z-20"
-        style={{ background: "#10141f", borderBottom: "1px solid #1e2a42" }}
+        style={{ background: "#0a0e17", borderBottom: "1px solid #1e2a42" }}
       >
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1 text-white"
+          className="flex items-center gap-2 text-white"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M13 4l-6 6 6 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
+          <TickerLogo symbol={decodedSymbol} size={32} />
           <div>
             <div className="text-[17px] font-bold leading-tight">
               {decodedSymbol.replace("^", "")}
             </div>
             {quote && (
-              <div className="text-[11px] text-wb-muted">
+              <div className="text-[11px] text-wb-muted leading-tight">
                 {quote.longName || quote.shortName}
               </div>
             )}
@@ -133,7 +135,7 @@ export default function StockDetailPage({ params }: PageProps) {
             className="flex tabs-scroll sticky z-10"
             style={{
               top: 80,
-              background: "#10141f",
+              background: "#0a0e17",
               borderBottom: "1px solid #1e2a42",
             }}
           >

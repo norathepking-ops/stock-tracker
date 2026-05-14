@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useScrollRestore } from "@/hooks/useScrollRestore";
 import type { NewsItem } from "@/lib/yahoo/fetcher";
 
 function timeAgo(ms: number) {
@@ -14,6 +15,7 @@ function timeAgo(ms: number) {
 }
 
 export default function NewsPage() {
+  useScrollRestore("news");
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 

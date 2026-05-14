@@ -51,7 +51,7 @@ export default function StockHeader({ quote }: { quote: QuoteData }) {
       : "Pre-Market";
 
   return (
-    <div className="px-4 pt-3 pb-2" style={{ background: "#10141f" }}>
+    <div className="px-4 pt-3 pb-2" style={{ background: "#0a0e17" }}>
       {/* Main price */}
       <div className="text-[36px] font-bold text-white leading-tight tracking-tight">
         {fmtPrice(quote.regularMarketPrice)}

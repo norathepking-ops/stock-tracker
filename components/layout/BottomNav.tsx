@@ -42,12 +42,12 @@ const tabs = [
     ),
   },
   {
-    href: "/search",
-    label: "Search",
+    href: "/explore",
+    label: "Explore",
     icon: (active: boolean) => (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <circle cx="11" cy="11" r="7" stroke={active ? "#1db7ff" : "#8a9bc3"} strokeWidth="1.5" />
-        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke={active ? "#1db7ff" : "#8a9bc3"} strokeWidth="2" strokeLinecap="round" />
+        <circle cx="12" cy="12" r="9" stroke={active ? "#1db7ff" : "#8a9bc3"} strokeWidth="1.5" />
+        <polygon points="10,8 16,12 10,16" fill={active ? "#1db7ff" : "#8a9bc3"} />
       </svg>
     ),
   },
@@ -82,6 +82,7 @@ export default function BottomNav() {
           <Link
             key={tab.href}
             href={tab.href}
+            scroll={false}
             className="flex flex-1 flex-col items-center gap-1 py-2"
           >
             {tab.icon(active)}

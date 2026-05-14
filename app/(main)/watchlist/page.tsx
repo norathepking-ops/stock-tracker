@@ -4,11 +4,12 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import WatchlistItem from "@/components/watchlist/WatchlistItem";
 import AddTickerModal from "@/components/watchlist/AddTickerModal";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useScrollRestore } from "@/hooks/useScrollRestore";
 import type { QuoteData } from "@/lib/yahoo/fetcher";
 
 const DEFAULT_WATCHLIST = ["^DJI", "^IXIC", "^GSPC", "AAPL", "NVDA", "META", "TSLA"];
 const STORAGE_KEY = "wb_watchlist";
-const REFRESH_INTERVAL = 20000;
+const REFRESH_INTERVAL = 10000;
 
 function loadWatchlist(): string[] {
   if (typeof window === "undefined") return DEFAULT_WATCHLIST;
@@ -24,12 +25,14 @@ function saveWatchlist(symbols: string[]) {
 }
 
 export default function WatchlistPage() {
+  useScrollRestore("watchlist");
   const [symbols, setSymbols] = useState<string[]>([]);
   const [quotes, setQuotes] = useState<Record<string, QuoteData>>({});
   const [sparklines, setSparklines] = useState<Record<string, number[]>>({});
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Drag-and-drop state
@@ -55,6 +58,7 @@ export default function WatchlistPage() {
         results.forEach((q, i) => { if (q) next[syms[i]] = q; });
         return next;
       });
+      setLastUpdated(new Date());
     } catch {}
     finally { setLoading(false); }
   }, []);
@@ -133,7 +137,7 @@ export default function WatchlistPage() {
         {/* Header */}
         <div
           className="flex items-center justify-between px-4 pt-14 pb-3 sticky top-0 z-10"
-          style={{ background: "#10141f", borderBottom: "1px solid #1e2a42" }}
+          style={{ background: "#0a0e17", borderBottom: "1px solid #1e2a42" }}
         >
           <div className="flex items-center gap-2">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -141,7 +145,14 @@ export default function WatchlistPage() {
               <rect x="2" y="8" width="10" height="2" rx="1" fill="#8a9bc3" />
               <rect x="2" y="13" width="12" height="2" rx="1" fill="#8a9bc3" />
             </svg>
-            <h1 className="text-[18px] font-bold text-white">My Watchlist</h1>
+            <div className="flex flex-col">
+              <h1 className="text-[18px] font-bold text-white leading-tight">My Watchlist</h1>
+              {lastUpdated && (
+                <p className="text-[10px] text-wb-muted leading-tight">
+                  อัปเดต {lastUpdated.toTimeString().slice(0, 8)}
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-5">
             <button onClick={() => setShowAdd(true)}>

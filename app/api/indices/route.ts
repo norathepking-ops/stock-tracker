@@ -3,6 +3,6 @@ import { fetchMultiQuote, INDEX_SYMBOLS } from "@/lib/yahoo/fetcher";
 export async function GET() {
   const data = await fetchMultiQuote(INDEX_SYMBOLS);
   return Response.json(data, {
-    headers: { "Cache-Control": "public, max-age=30" },
+    headers: { "Cache-Control": "no-store" },
   });
 }

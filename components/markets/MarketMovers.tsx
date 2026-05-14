@@ -27,17 +27,31 @@ function fmtPct(p: number) {
 export default function MarketMovers() {
   const [tab, setTab] = useState<Tab>("active");
   const [data, setData] = useState<QuoteData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [switching, setSwitching] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [sparklines, setSparklines] = useState<Record<string, number[]>>({});
   const sparkFetched = useRef<Set<string>>(new Set());
+  const hasLoaded = useRef(false);
+  // Tracks the latest fetch — stale responses with older IDs are discarded
+  const activeFetchId = useRef(0);
 
   useEffect(() => {
-    setLoading(true);
+    const myId = ++activeFetchId.current;
+
+    if (!hasLoaded.current) {
+      setInitialLoading(true);
+    } else {
+      setSwitching(true);
+    }
+
     fetch(`/api/movers?type=${tab}`)
       .then((r) => r.json())
       .then((rows: QuoteData[]) => {
+        if (myId !== activeFetchId.current) return; // stale — a newer tab was clicked
         setData(rows);
-        // Fetch sparklines for visible stocks lazily
+        setLastUpdated(new Date());
+        hasLoaded.current = true;
         rows.forEach((q) => {
           if (sparkFetched.current.has(q.symbol)) return;
           sparkFetched.current.add(q.symbol);
@@ -52,8 +66,15 @@ export default function MarketMovers() {
             .catch(() => {});
         });
       })
-      .catch(() => setData([]))
-      .finally(() => setLoading(false));
+      .catch(() => {
+        if (myId !== activeFetchId.current) return;
+        setData([]);
+      })
+      .finally(() => {
+        if (myId !== activeFetchId.current) return;
+        setInitialLoading(false);
+        setSwitching(false);
+      });
   }, [tab]);
 
   const tabs: { id: Tab; label: string }[] = [
@@ -62,14 +83,26 @@ export default function MarketMovers() {
     { id: "losers", label: "Top Losers" },
   ];
 
+  function switchTab(newTab: Tab) {
+    const main = document.querySelector("main");
+    const saved = main?.scrollTop ?? 0;
+    setTab(newTab);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (main) main.scrollTop = saved;
+      });
+    });
+  }
+
   return (
     <div>
       {/* Tab bar */}
-      <div className="flex tabs-scroll" style={{ borderBottom: "1px solid #1e2a42" }}>
+      <div className="flex items-center tabs-scroll" style={{ borderBottom: "1px solid #1e2a42" }}>
         {tabs.map((t) => (
           <button
             key={t.id}
-            onClick={() => setTab(t.id)}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => switchTab(t.id)}
             className="flex-shrink-0 px-4 py-3 text-[14px] font-semibold transition-colors relative"
             style={{ color: tab === t.id ? "#ffffff" : "#8a9bc3" }}
           >
@@ -82,6 +115,11 @@ export default function MarketMovers() {
             )}
           </button>
         ))}
+        {lastUpdated && (
+          <span className="ml-auto pl-2 pr-4 text-[10px] text-wb-muted whitespace-nowrap flex-shrink-0">
+            อัปเดต {lastUpdated.toTimeString().slice(0, 8)}
+          </span>
+        )}
       </div>
 
       {/* Column headers */}
@@ -96,12 +134,20 @@ export default function MarketMovers() {
         </span>
       </div>
 
-      {loading ? (
+      {initialLoading ? (
         <div className="flex items-center justify-center py-16">
           <LoadingSpinner size={32} />
         </div>
       ) : (
-        <div className="divide-y" style={{ borderColor: "#1e2a42" }}>
+        <div
+          className="divide-y"
+          style={{
+            borderColor: "#1e2a42",
+            opacity: switching ? 0.45 : 1,
+            transition: "opacity 0.15s",
+            pointerEvents: switching ? "none" : undefined,
+          }}
+        >
           {data.map((q) => {
             const isUp = q.regularMarketChangePercent >= 0;
             const color = isUp ? "#00c076" : "#ff333a";
@@ -112,7 +158,6 @@ export default function MarketMovers() {
                 href={`/stock/${encodeURIComponent(q.symbol)}`}
                 className="flex items-center px-4 py-3 active:opacity-70 transition-opacity"
               >
-                {/* Logo + name */}
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   <TickerLogo symbol={q.symbol} size={36} />
                   <div className="flex flex-col min-w-0">
@@ -123,7 +168,6 @@ export default function MarketMovers() {
                   </div>
                 </div>
 
-                {/* Sparkline — real data or fallback triangle */}
                 <div className="w-20 flex justify-center">
                   <Sparkline
                     data={spark && spark.length > 1
@@ -135,7 +179,6 @@ export default function MarketMovers() {
                   />
                 </div>
 
-                {/* Value */}
                 <div className="w-28 text-right flex flex-col">
                   {tab === "active" ? (
                     <span className="text-[13px] text-white font-semibold">

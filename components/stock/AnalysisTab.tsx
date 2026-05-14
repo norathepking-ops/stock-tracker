@@ -11,7 +11,7 @@ interface AnalysisTabProps {
 
 const RATING_COLORS: Record<string, string> = {
   strongBuy: "#00c076",
-  buy: "#4caf50",
+  buy: "#00a060",
   hold: "#f5c842",
   underperform: "#ff8c00",
   sell: "#ff333a",
@@ -30,8 +30,8 @@ export default function AnalysisTab({ symbol, currentPrice }: AnalysisTabProps) 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/analysis/${symbol}`)
-      .then((r) => r.json())
+    fetch(`/api/analysis/${encodeURIComponent(symbol)}`)
+      .then((r) => (r.ok ? r.json() : null))
       .then(setData)
       .catch(() => setData(null))
       .finally(() => setLoading(false));

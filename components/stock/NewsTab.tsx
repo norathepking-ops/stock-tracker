@@ -22,7 +22,7 @@ export default function NewsTab({ symbol }: NewsTabProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/news/${symbol}`)
+    fetch(`/api/news/${encodeURIComponent(symbol)}`)
       .then((r) => r.json())
       .then(setNews)
       .catch(() => setNews([]))
