@@ -1,4 +1,4 @@
-const CACHE = "stockdash-v1";
+const CACHE = "stockdash-v2";
 
 // App shell pages to precache
 const PRECACHE_URLS = ["/watchlist", "/markets", "/news", "/search"];
