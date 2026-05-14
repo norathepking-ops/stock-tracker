@@ -29,7 +29,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 ## ขั้นตอนที่ 4: รัน App ในเครื่อง
 
 ```bash
-cd webull-clone
+cd stockdash
 npm run dev
 ```
 
@@ -39,7 +39,7 @@ npm run dev
 
 1. ไปที่ https://vercel.com → Sign Up (ใช้ Google ได้)
 2. กด **Add New → Project**
-3. Import จาก GitHub หรือ **upload folder** `webull-clone`
+3. Import จาก GitHub หรือ **upload folder** `stockdash`
 4. ใส่ Environment Variables:
    - `NEXT_PUBLIC_SUPABASE_URL` = URL จาก Supabase
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = Key จาก Supabase

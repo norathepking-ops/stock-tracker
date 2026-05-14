@@ -8,7 +8,7 @@
 
 **Stockdash** is a mobile-first PWA stock tracking app styled exactly like Webull (dark theme). Built with Next.js App Router + TypeScript + Tailwind CSS. Data comes from Yahoo Finance via the `yahoo-finance2` node package. No backend server — everything runs via Next.js API routes.
 
-**Working directory:** `C:\Users\Admin\Desktop\All Apps\Stockdash\webull-clone\`
+**Working directory:** `C:\Users\Admin\Desktop\All Apps\Stockdash\stockdash\`
 
 ---
 
@@ -55,7 +55,7 @@ Theme color:         #0a0e17
 ## App Architecture
 
 ```
-webull-clone/
+stockdash/
 ├── app/
 │   ├── layout.tsx               ← Root layout: PWA meta, Inter font, PwaRegistration
 │   ├── page.tsx                 ← Redirects to /watchlist
@@ -254,7 +254,7 @@ Key constants in `fetcher.ts`:
 
 ```bash
 # Start dev server
-cd "C:\Users\Admin\Desktop\All Apps\Stockdash\webull-clone"
+cd "C:\Users\Admin\Desktop\All Apps\Stockdash\stockdash"
 npm run dev
 
 # Commit after each meaningful feature
