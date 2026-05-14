@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "Write-Output '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"CONSTRAINT CHECK before editing: (1) Preserve Webull colors: bg=#0a0e17, accent=#1db7ff, green=#00c076, red=#ff333a, border=#1e2a42 (2) ADD to existing files, never rewrite from scratch (3) Keep BottomNav 5 tabs unchanged: Watchlists/Markets/News/Explore/Menu (4) Preserve all existing props, state, and features in the target component (5) Check CLAUDE.md Rules section if unsure.\"}}'",
+            "statusMessage": "Checking project constraints..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "Write-Output '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"REMINDER: If you added or changed a feature, update the Session Log table and the relevant Features section in CLAUDE.md. Then remind the user to commit: git add . && git commit.\"},\"systemMessage\":\"Feature changed? Remember to update CLAUDE.md.\"}'",
+            "statusMessage": "Checking CLAUDE.md update needed..."
+          }
+        ]
+      }
+    ]
+  }
+}
